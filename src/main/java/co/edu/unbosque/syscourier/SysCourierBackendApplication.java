@@ -1,4 +1,4 @@
-package co.edu.unbosque.syscourier.syscourier;
+package co.edu.unbosque.syscourier;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
