@@ -6,24 +6,41 @@ import co.edu.unbosque.syscourier.services.GuiaIntroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/guiaintro")
+@RequestMapping("/")
 @CrossOrigin
 public class GuiaController {
 
     @Autowired
     private GuiaIntroService guiaIntroService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<? extends Object> getById(@PathVariable("id") Integer id){
-        try{
+    @GetMapping("/guiasIntro/{estado}")
+    public ResponseEntity<?> getAllByUser(@PathVariable("estado") String estado) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            String correo = authentication.getName();
+            return new ResponseEntity<>(guiaIntroService.obtenerTodoPorUsuario(correo, estado), HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<String>("No se ha ingresado correctamente", HttpStatus.OK);
+        }
+        // Resto del código de tu controlador
+    }
+
+
+    @GetMapping("/guiaintro/{id}")
+    public ResponseEntity<? extends Object> getById(@PathVariable("id") Integer id) {
+        try {
             return new ResponseEntity<GuiaIntroDTO>(guiaIntroService.getById(id), HttpStatus.ACCEPTED);
-        } catch(IllegalArgumentException illegalArgumentException){
+        } catch (IllegalArgumentException illegalArgumentException) {
             System.out.println(illegalArgumentException.getCause());
             return new ResponseEntity<ErrorDTO>(new ErrorDTO(illegalArgumentException.getMessage()), HttpStatus.NOT_FOUND);
-        } catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e.getCause());
             return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
