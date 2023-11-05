@@ -6,6 +6,8 @@ import co.edu.unbosque.syscourier.models.repositories.GuiaIntroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GuiaIntroService {
 
@@ -25,5 +27,10 @@ public class GuiaIntroService {
 
         // Consultar la entidad por ID
         return guiaIntroMapper.toGuiaIntroDTO(guiaIntroRepository.findById(id).orElse(null));
+    }
+
+    public List<GuiaIntroDTO> obtenerTodoPorUsuario(String correo, String codigoEstado){
+
+        return guiaIntroMapper.toGuiaIntroDTOs(guiaIntroRepository.findGuiasIntroByCorreoAndCodigoEstado(correo,codigoEstado).orElse(null));
     }
 }

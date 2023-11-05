@@ -22,6 +22,6 @@ public interface GuiaIntroMapper {
     @InheritInverseConfiguration
     GuiaIntro toGuiaIntro (GuiaIntroDTO guiaIntroDTO);
 
-    List<GuiaIntroDTO> toGuiaIntroDTOs(List<GuiaIntro> user);
+    List<GuiaIntroDTO> toGuiaIntroDTOs(List<GuiaIntro> guiaIntroList);
 
 }
