@@ -10,12 +10,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/")
 @CrossOrigin
-public class GuiaController {
+public class GuiaIntroController {
 
     @Autowired
     private GuiaIntroService guiaIntroService;
