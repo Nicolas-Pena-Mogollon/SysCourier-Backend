@@ -1,5 +1,6 @@
 package co.edu.unbosque.syscourier.controllers;
 
+import co.edu.unbosque.syscourier.DTOs.ErrorDTO;
 import co.edu.unbosque.syscourier.DTOs.TokenDTO;
 import co.edu.unbosque.syscourier.services.UsuarioService;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -32,9 +33,9 @@ public class LoginController {
     public ResponseEntity<?> login(@RequestParam("correo") String correo, @RequestParam("password") String password) {
 
         if (usuarioService.validarCredenciales(correo, password, "MENSAJERO")){
-            return new ResponseEntity<TokenDTO>(new TokenDTO(getJWTToken(correo, "MENSAJERO")), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(new TokenDTO(getJWTToken(correo, "MENSAJERO")), HttpStatus.ACCEPTED);
         }else{
-            return new ResponseEntity<String>("No se ha ingresado correctamente", HttpStatus.OK);
+            return new ResponseEntity<>(new ErrorDTO("No se ha ingresado correctamente"), HttpStatus.OK);
         }
 
 

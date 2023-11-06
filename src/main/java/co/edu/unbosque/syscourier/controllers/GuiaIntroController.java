@@ -25,9 +25,8 @@ public class GuiaIntroController {
             String correo = authentication.getName();
             return new ResponseEntity<>(guiaIntroService.obtenerTodoPorUsuario(correo, estado), HttpStatus.ACCEPTED);
         } else {
-            return new ResponseEntity<String>("No se ha ingresado correctamente", HttpStatus.OK);
+            return new ResponseEntity<>(new ErrorDTO("No se ha ingresado correctamente"), HttpStatus.OK);
         }
-        // Resto del código de tu controlador
     }
 
 
