@@ -21,6 +21,7 @@ public class SysCourierBackendApplication {
 
     @EnableWebSecurity
     @Configuration
+    static
     class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -28,9 +29,7 @@ public class SysCourierBackendApplication {
                     .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                     .authorizeRequests()
                     .antMatchers(HttpMethod.POST, "/loginMensajero").permitAll()
-                    .antMatchers(HttpMethod.POST, "/mensajero/**").hasRole("MENSAJERO")
                     .anyRequest().authenticated();
-
         }
 
     }

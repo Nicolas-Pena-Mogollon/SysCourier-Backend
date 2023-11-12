@@ -18,7 +18,7 @@ public class GuiaInfoController {
     private GuiaInfoService guiaInfoService;
 
     @GetMapping("/guiainfo/{id}")
-    public ResponseEntity<? extends Object> getById(@PathVariable("id") String id) {
+    public ResponseEntity<?> getById(@PathVariable("id") String id) {
         try {
             return new ResponseEntity<>(guiaInfoService.getById(Integer.parseInt(id)), HttpStatus.ACCEPTED);
         } catch (IllegalArgumentException illegalArgumentException) {
