@@ -38,9 +38,6 @@ public class LoginController {
         }else{
             return new ResponseEntity<String>("No se ha ingresado correctamente", HttpStatus.OK);
         }
-
-
-
     }
 
     private String getJWTToken(String username, String rol) {
@@ -56,7 +53,7 @@ public class LoginController {
                                 .map(GrantedAuthority::getAuthority)
                                 .collect(Collectors.toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 600000))
+                .setExpiration(new Date(System.currentTimeMillis() + 60000000))
                 .signWith(SignatureAlgorithm.HS512,
                         secretKey.getBytes()).compact();
         return "Bearer " + token;
