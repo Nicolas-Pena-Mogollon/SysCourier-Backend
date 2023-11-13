@@ -14,10 +14,9 @@ public class AsignacionService {
         this.asignacionRepository = asignacionRepository;
     }
 
-    public boolean realizarAsignacion(int guiaId, String correo) throws AsignacionException {
+    public void realizarAsignacion(int guiaId, String correo) throws AsignacionException {
         try {
-            return asignacionRepository.
-                    realizarAsignacion(guiaId, correo);
+            asignacionRepository.realizarAsignacion(guiaId, correo);
         } catch (AsignacionException e) {
             throw e;
         } catch (Exception e) {

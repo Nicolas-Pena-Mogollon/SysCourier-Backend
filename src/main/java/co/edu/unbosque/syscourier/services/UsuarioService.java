@@ -9,11 +9,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioMapper usuarioMapper;
+    private final UsuarioMapper usuarioMapper;
+
+    private final UsuarioRepository usuarioRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    public UsuarioService(UsuarioMapper usuarioMapper, UsuarioRepository usuarioRepository) {
+        this.usuarioMapper = usuarioMapper;
+        this.usuarioRepository = usuarioRepository;
+    }
 
 
     public UsuarioDTO getByCorreoAndRol(String correo, String rol) {

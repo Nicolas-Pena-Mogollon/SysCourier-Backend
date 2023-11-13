@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface GuiaInfoRepository extends JpaRepository<GuiaInfo, Integer> {
 
     @Query("select g from guia_informacion g where g.id = :id")
-    GuiaInfo findByIdCustom(@Param("id") Integer id);
+    Optional<GuiaInfo> findByIdCustom(@Param("id") Integer id);
 }

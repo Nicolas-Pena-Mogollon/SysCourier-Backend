@@ -7,30 +7,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class GuiaIntroService {
 
-    @Autowired
-    private GuiaIntroMapper guiaIntroMapper;
+    private final GuiaIntroMapper guiaIntroMapper;
+
+    private final GuiaIntroRepository guiaIntroRepository;
 
     @Autowired
-    private GuiaIntroRepository guiaIntroRepository;
-
-    public GuiaIntroDTO getById(Integer id) {
-        // Validar el ID antes de la consulta
-        if (id <= 0) {
-            // Manejo de ID no válido, podrías lanzar una excepción personalizada aquí
-            // Ejemplo: throw new EntityNotFoundException("ID no válido");
-            return null;
-        }
-
-        // Consultar la entidad por ID
-        return guiaIntroMapper.toGuiaIntroDTO(guiaIntroRepository.findById(id).orElse(null));
+    public GuiaIntroService(GuiaIntroMapper guiaIntroMapper, GuiaIntroRepository guiaIntroRepository) {
+        this.guiaIntroMapper = guiaIntroMapper;
+        this.guiaIntroRepository = guiaIntroRepository;
     }
 
-    public List<GuiaIntroDTO> obtenerTodoPorUsuario(String correo, String codigoEstado){
-
-        return guiaIntroMapper.toGuiaIntroDTOs(guiaIntroRepository.findGuiasIntroByCorreoAndCodigoEstado(correo,codigoEstado).orElse(null));
+    public List<GuiaIntroDTO> obtenerTodoPorUsuarioYEstado(String correo, String codigoEstado) {
+        // 6 -> ENTREGA, 7 -> DEVOLUCIÓN
+        if (Objects.equals(codigoEstado, "6") || Objects.equals(codigoEstado, "7")) {
+            return guiaIntroMapper.toGuiaIntroDTOs(guiaIntroRepository.findGuiasIntroByCorreoAndCodigoEstadoconFecha(correo, codigoEstado).orElse(null));
+        }
+        return guiaIntroMapper.toGuiaIntroDTOs(guiaIntroRepository.findGuiasIntroByCorreoAndCodigoEstado(correo, codigoEstado).orElse(null));
     }
 }

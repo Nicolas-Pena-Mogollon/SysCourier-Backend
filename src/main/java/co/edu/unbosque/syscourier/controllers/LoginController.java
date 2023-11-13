@@ -24,17 +24,21 @@ import java.util.stream.Collectors;
 @RestController
 public class LoginController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
     @Value("${myapp.secretKey}")
     private String secretKey;
+
+    @Autowired
+    public LoginController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @PostMapping("/loginMensajero")
     public ResponseEntity<?> login(@RequestParam("correo") String correo, @RequestParam("password") String password) {
 
-        if (usuarioService.validarCredenciales(correo, password, "MENSAJERO")){
+        if (usuarioService.validarCredenciales(correo, password, "MENSAJERO")) {
             return new ResponseEntity<>(new TokenDTO(getJWTToken(correo, "MENSAJERO")), HttpStatus.ACCEPTED);
-        }else{
+        } else {
             return new ResponseEntity<>(new ErrorDTO("No se ha ingresado correctamente"), HttpStatus.OK);
         }
     }
@@ -45,7 +49,7 @@ public class LoginController {
 
         String token = Jwts
                 .builder()
-                .setId("softtekJWT")
+                .setId("SysCourierJWT")
                 .setSubject(username)
                 .claim("authorities",
                         grantedAuthorities.stream()

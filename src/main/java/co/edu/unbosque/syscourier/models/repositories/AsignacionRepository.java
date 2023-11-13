@@ -22,7 +22,7 @@ public class AsignacionRepository {
     }
 
     @Transactional
-    public boolean realizarAsignacion(int guiaId, String correo) throws AsignacionException {
+    public void realizarAsignacion(int guiaId, String correo) throws AsignacionException {
         try {
             Connection connection = dataSource.getConnection();
             CallableStatement statement = connection.prepareCall("{call realizarAsignacion(?, ?, ?)}");
@@ -43,6 +43,5 @@ public class AsignacionRepository {
         } catch (Exception e) {
             throw new AsignacionException("Error durante la asignación: " + e.getMessage());
         }
-        return true;
     }
 }
