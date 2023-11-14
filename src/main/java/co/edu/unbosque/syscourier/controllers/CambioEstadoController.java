@@ -11,17 +11,34 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controlador que maneja el cambio de estado de guías.
+ */
 @RestController
 @RequestMapping("/")
 public class CambioEstadoController {
 
+    /**
+     * Servicio de cambio de estado
+     */
     private final CambioEstadoService cambioEstadoService;
 
+    /**
+     * Constructor que maneja la dependencia del servicio de cambio de estado.
+     *
+     * @param cambioEstadoService Servicio de cambio de estado.
+     */
     @Autowired
     public CambioEstadoController(CambioEstadoService cambioEstadoService) {
         this.cambioEstadoService = cambioEstadoService;
     }
 
+    /**
+     * Reealizar el cambio de estado de una guía.
+     *
+     * @param cambioEstadoDTO DTO del cambio de estado.
+     * @return ResponseEntity con el estado de la operación.
+     */
     @PutMapping("/cambioestado")
     public ResponseEntity<?> cambiarEstado(@RequestBody CambioEstadoDTO cambioEstadoDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

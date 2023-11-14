@@ -8,18 +8,36 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controlador que maneja la información de guías.
+ */
 @RestController
 @RequestMapping("/")
 @CrossOrigin
 public class GuiaInfoController {
 
+    /**
+     * Servicio de información de guias
+     */
     private final GuiaInfoService guiaInfoService;
 
+
+    /**
+     * Constructor que maneja la dependencia del servicio de información de guía.
+     *
+     * @param guiaInfoService Servicio de información de guía.
+     */
     @Autowired
     public GuiaInfoController(GuiaInfoService guiaInfoService) {
         this.guiaInfoService = guiaInfoService;
     }
 
+    /**
+     * Obtiene información de una guía por su identificador.
+     *
+     * @param id Identificador de la guía a ser consultada.
+     * @return ResponseEntity con la información de la guía o un mensaje de error si no se encuentra.
+     */
     @GetMapping("/guiainfo/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
 

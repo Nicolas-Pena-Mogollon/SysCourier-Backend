@@ -12,15 +12,34 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 
+/**
+ * Gestión de  las asignaciones de guías en la base de datos.
+ */
 @Repository
 public class AsignacionRepository {
+
+    /**
+     * Atributo privado que muestra el origen de los datos
+     */
     private final DataSource dataSource;
 
+    /**
+     * Constructor de la clase que maneja el origen de datos.
+     *
+     * @param dataSource Origen de datos.
+     */
     @Autowired
     public AsignacionRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Método que realiza la asignación de una guía a un mensajero.
+     *
+     * @param guiaId Identificador de la guía a asignar.
+     * @param correo Correo electrónico del mensajero al que se asignará la guía.
+     * @throws AsignacionException Excepción lanzada en caso de errores durante la asignación.
+     */
     @Transactional
     public void realizarAsignacion(int guiaId, String correo) throws AsignacionException {
         try {

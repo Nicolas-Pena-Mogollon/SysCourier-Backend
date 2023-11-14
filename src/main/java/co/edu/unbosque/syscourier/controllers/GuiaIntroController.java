@@ -9,18 +9,36 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controlador que maneja la información de la introducción de guías
+ */
 @RestController
 @RequestMapping("/")
 @CrossOrigin
 public class GuiaIntroController {
 
+    /**
+     * Servicio de Introducción  de las guias
+     */
     private final GuiaIntroService guiaIntroService;
 
+    /**
+     * Constructor que maneja la dependencia del servicio de introducción de guías.
+     *
+     * @param guiaIntroService Servicio de introducción de guías.
+     */
     @Autowired
     public GuiaIntroController(GuiaIntroService guiaIntroService) {
         this.guiaIntroService = guiaIntroService;
     }
 
+
+    /**
+     * Obtiene todas las guías de un usuario según su estado.
+     *
+     * @param estado Estado de las guías a ser consultadas.
+     * @return ResponseEntity con la lista de guías o un mensaje de error si no se encuentra el usuario.
+     */
     @GetMapping("/guiasIntro/{estado}")
     public ResponseEntity<?> getAllByUser(@PathVariable("estado") String estado) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

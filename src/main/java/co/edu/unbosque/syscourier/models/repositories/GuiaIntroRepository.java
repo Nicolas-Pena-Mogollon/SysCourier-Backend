@@ -8,10 +8,20 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * Repositorio que maneja el acceso a datos de las guías de introducción.
+ *
+ */
 @Repository
 public interface GuiaIntroRepository extends JpaRepository<GuiaIntro, Integer> {
 
+    /**
+     * Consulta para buscar guías de introducción por correo y código de estado.
+     *
+     * @param correo        Correo del usuario.
+     * @param codigoEstado  Código del estado de la guía.
+     * @return Objeto Optional que contiene la lista de guías de introducción si se encuentran, o vacío si no.
+     */
 
     @Query(nativeQuery = true,
             value = "SELECT gi.* " +
@@ -26,6 +36,13 @@ public interface GuiaIntroRepository extends JpaRepository<GuiaIntro, Integer> {
             @Param("correo") String correo,
             @Param("codigoEstado") String codigoEstado);
 
+    /**
+     * Consulta para buscar guías de introducción por correo, código de estado y fecha.
+     *
+     * @param correo        Correo del usuario.
+     * @param codigoEstado  Código del estado de la guía.
+     * @return Objeto Optional que contiene la lista de guías de introducción si se encuentran, o vacío si no.
+     */
     @Query(nativeQuery = true,
             value = "SELECT gi.* " +
                     "FROM guia_introduccion gi " +

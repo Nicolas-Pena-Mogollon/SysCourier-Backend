@@ -21,13 +21,26 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
+/**
+ * Filtro de autorización que valida y procesa los tokens JWT en las solicitudes HTTP.
+ */
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
+
 
     private final String HEADER = "Authorization";
     private final String PREFIX = "Bearer ";
     @Value("${myapp.secretKey}")
     private String secretKey;
 
+    /**
+     * Filtra las solicitudes HTTP para validar y procesar los tokens JWT.
+     *
+     * @param request  HttpServletRequest que representa la solicitud HTTP.
+     * @param response HttpServletResponse que representa la respuesta HTTP.
+     * @param chain    FilterChain que permite la ejecución de filtros adicionales.
+     * @throws ServletException Si ocurre una excepción de servlet.
+     * @throws IOException      Si ocurre una excepción de entrada/salida.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         try {
@@ -48,6 +61,15 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         }
     }
 
+    /**
+     * Valida y parsea el token JWT obtenido del encabezado de autorización de la solicitud.
+     *
+     * @param request HttpServletRequest que representa la solicitud HTTP.
+     * @return Claims (reclamaciones) del token JWT que contienen información como el nombre de usuario, roles, etc.
+     * @throws ExpiredJwtException      Si el token JWT ha expirado.
+     * @throws UnsupportedJwtException  Si el token JWT no es soportado.
+     * @throws MalformedJwtException     Si el token JWT está mal formado.
+     */
     private Claims validateToken(HttpServletRequest request) {
         String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");
         return Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(jwtToken).getBody();
@@ -56,7 +78,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     /**
      * Metodo para autenticarnos dentro del flujo de Spring
      *
-     * @param claims
+     * @param claims Claims del token JWT que contienen la información de autorización.
      */
     private void setUpSpringAuthentication(Claims claims) {
         @SuppressWarnings("unchecked")
@@ -68,6 +90,13 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     }
 
+    /**
+     * Verifica si existe un token JWT en la solicitud.
+     *
+     * @param request HttpServletRequest que representa la solicitud HTTP.
+     * @param res     HttpServletResponse que representa la respuesta HTTP.
+     * @return true si existe un token JWT, false en caso contrario.
+     */
     private boolean existeJWTToken(HttpServletRequest request, HttpServletResponse res) {
         String authenticationHeader = request.getHeader(HEADER);
         if (authenticationHeader == null || !authenticationHeader.startsWith(PREFIX))

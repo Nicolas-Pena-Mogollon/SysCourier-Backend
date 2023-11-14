@@ -12,16 +12,40 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 
+/**
+ * Gestión de los cambios de estado de guías en la base de datos.
+ *
+ */
 @Repository
 public class CambioEstadoRepository {
 
+    /**
+     * Atributo privado que muestra el origen de los datos
+     */
     private final DataSource dataSource;
 
+    /**
+     * Constructor de la clase que maneja el origen de datos.
+     *
+     * @param dataSource Origen de datos.
+     */
     @Autowired
     public CambioEstadoRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+
+    /**
+     * Método que realiza el cambio de estado de una guía.
+     *
+     * @param correo        Correo electrónico del usuario que realiza el cambio de estado.
+     * @param guiaId        Identificador de la guía a la que se cambiará el estado.
+     * @param codEstado     Nuevo código de estado de la guía.
+     * @param motivo        Motivo asociado al cambio de estado.
+     * @param observaciones Observaciones adicionales al cambio de estado.
+     * @return true si el cambio de estado se realizó correctamente, false en caso contrario.
+     * @throws CambioEstadoException Excepción lanzada en caso de errores durante el cambio de estado.
+     */
     @Transactional
     public boolean cambiarEstado(String correo, int guiaId, int codEstado, String motivo, String observaciones) throws CambioEstadoException {
         try {

@@ -5,15 +5,15 @@ package co.edu.unbosque.syscourier.DTOs;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 /**
- * Public class for dto error
- * @Data allows the use of db data and persistence
- * @AllArgsConstructor annotation automatically generates a constructor with a parameter for each field in your class
+ * clase para el DTO de la clase Error
+ * @Data permite el uso de la información y la persistencia
+ * @AllArgsConstructor  genera los constructores y parametros para la clase
  **/
 @Data
 @AllArgsConstructor
 public class ErrorDTO {
     /**
-     * Private attribute of type String of name message
+     * Atributos privados de la clase
      **/
     private String message;
 

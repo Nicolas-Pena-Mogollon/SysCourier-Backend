@@ -19,6 +19,9 @@ public class SysCourierBackendApplication {
         SpringApplication.run(SysCourierBackendApplication.class, args);
     }
 
+    /**
+     * Configuración de seguridad para la aplicación.
+     */
     @EnableWebSecurity
     @Configuration
     static
