@@ -19,38 +19,20 @@ import io.jsonwebtoken.Jwts;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-/**
- * Controlador que maneja las operaciones del login  y generación de tokens.
- */
+
 @CrossOrigin
 @RestController
 public class LoginController {
 
-    /**
-     * Servicio que valida las credenciales durante el login.
-     * Clave secreta con la que se firman los tokens JWT
-     */
     private final UsuarioService usuarioService;
     @Value("${myapp.secretKey}")
     private String secretKey;
 
-    /**
-     * Constructor que maneja la dependencia del servicio de usuario.
-     *
-     * @param usuarioService Servicio de usuario.
-     */
     @Autowired
     public LoginController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
-    /**
-     * Realizar el inicio de sesión de un mensajero y generar un token JWT.
-     *
-     * @param correo   Correo electrónico del mensajero.
-     * @param password Contraseña del mensajero.
-     * @return ResponseEntity con el token JWT en caso de éxito o un mensaje de error en caso de falla.
-     */
     @PostMapping("/loginMensajero")
     public ResponseEntity<?> login(@RequestParam("correo") String correo, @RequestParam("password") String password) {
 
@@ -61,20 +43,13 @@ public class LoginController {
         }
     }
 
-    /**
-     * Método que genera un token JWT.
-     *
-     * @param username Nombre de usuario (correo electrónico).
-     * @param rol      Rol del usuario.
-     * @return Token JWT firmado.
-     */
     private String getJWTToken(String username, String rol) {
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils
                 .commaSeparatedStringToAuthorityList(rol);
 
         String token = Jwts
                 .builder()
-                .setId("SysCourierJWT")
+                .setId("softtekJWT")
                 .setSubject(username)
                 .claim("authorities",
                         grantedAuthorities.stream()
