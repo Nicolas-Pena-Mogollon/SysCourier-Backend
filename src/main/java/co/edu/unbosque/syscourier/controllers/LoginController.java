@@ -49,7 +49,7 @@ public class LoginController {
 
         String token = Jwts
                 .builder()
-                .setId("softtekJWT")
+                .setId("syscourierJWT")
                 .setSubject(username)
                 .claim("authorities",
                         grantedAuthorities.stream()
