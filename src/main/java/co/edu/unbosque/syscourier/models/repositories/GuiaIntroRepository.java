@@ -52,7 +52,7 @@ public interface GuiaIntroRepository extends JpaRepository<GuiaIntro, Integer> {
                     "INNER JOIN usuario u ON u.id_usuario = geu.usuario_id " +
                     "WHERE u.correo = :correo " +
                     "AND ge.estado = :codigoEstado " +
-                    "AND ge.fecha BETWEEN DATE_SUB(CURDATE(), INTERVAL 2 DAY) AND CURDATE()")
+                    "AND ge.fecha BETWEEN DATE_SUB(NOW(), INTERVAL 2 DAY) AND NOW()")
     Optional<List<GuiaIntro>> findGuiasIntroByCorreoAndCodigoEstadoconFecha(
             @Param("correo") String correo,
             @Param("codigoEstado") String codigoEstado);
