@@ -2,10 +2,10 @@ package co.edu.unbosque.syscourier.controllers;
 
 import co.edu.unbosque.syscourier.DTOs.ErrorDTO;
 import co.edu.unbosque.syscourier.DTOs.TokenDTO;
+import co.edu.unbosque.syscourier.security.JWTConfig;
 import co.edu.unbosque.syscourier.services.UsuarioService;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,12 +25,13 @@ import java.util.stream.Collectors;
 public class LoginController {
 
     private final UsuarioService usuarioService;
-    @Value("${myapp.secretKey}")
-    private String secretKey;
+
+    private final JWTConfig jwtConfig;
 
     @Autowired
-    public LoginController(UsuarioService usuarioService) {
+    public LoginController(UsuarioService usuarioService, JWTConfig jwtConfig) {
         this.usuarioService = usuarioService;
+        this.jwtConfig = jwtConfig;
     }
 
     @PostMapping("/loginMensajero")
@@ -49,16 +50,16 @@ public class LoginController {
 
         String token = Jwts
                 .builder()
-                .setId("syscourierJWT")
+                .setId("SysCourierJWT")
                 .setSubject(username)
                 .claim("authorities",
                         grantedAuthorities.stream()
                                 .map(GrantedAuthority::getAuthority)
                                 .collect(Collectors.toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 60000000))
+                .setExpiration(new Date(System.currentTimeMillis() + 600000))
                 .signWith(SignatureAlgorithm.HS512,
-                        secretKey.getBytes()).compact();
+                        this.jwtConfig.getSecretKey().getBytes()).compact();
         return "Bearer " + token;
     }
 }
