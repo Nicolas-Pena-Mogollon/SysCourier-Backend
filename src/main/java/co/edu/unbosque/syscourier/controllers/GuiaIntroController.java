@@ -41,10 +41,16 @@ public class GuiaIntroController {
      */
     @GetMapping("/guiasIntro/{estado}")
     public ResponseEntity<?> getAllByUser(@PathVariable("estado") String estado) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if (authentication != null) {
-            String correo = authentication.getName();
-            return new ResponseEntity<>(guiaIntroService.obtenerTodoPorUsuarioYEstado(correo, estado), HttpStatus.ACCEPTED);
+            try {
+                String correo = authentication.getName();
+                return new ResponseEntity<>(guiaIntroService.obtenerTodoPorUsuarioYEstado(correo, estado), HttpStatus.ACCEPTED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ErrorDTO("Ocurrió un error al procesar la solicitud intente nuevamente"), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         } else {
             return new ResponseEntity<>(new ErrorDTO("No se ha ingresado correctamente"), HttpStatus.UNAUTHORIZED);
         }

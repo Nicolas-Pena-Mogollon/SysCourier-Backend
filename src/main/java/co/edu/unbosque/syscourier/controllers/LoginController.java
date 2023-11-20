@@ -36,11 +36,14 @@ public class LoginController {
 
     @PostMapping("/loginMensajero")
     public ResponseEntity<?> login(@RequestParam("correo") String correo, @RequestParam("password") String password) {
-
-        if (usuarioService.validarCredenciales(correo, password, "MENSAJERO")) {
-            return new ResponseEntity<>(new TokenDTO(getJWTToken(correo, "MENSAJERO")), HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>(new ErrorDTO("No se ha ingresado correctamente"), HttpStatus.OK);
+        try {
+            if (usuarioService.validarCredenciales(correo, password, "MENSAJERO")) {
+                return new ResponseEntity<>(new TokenDTO(getJWTToken(correo, "MENSAJERO")), HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>(new ErrorDTO("No se ha ingresado correctamente"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO("Ocurrió un error al procesar la solicitud intente nuevamente"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

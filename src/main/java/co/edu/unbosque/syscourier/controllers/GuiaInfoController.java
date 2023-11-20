@@ -40,10 +40,13 @@ public class GuiaInfoController {
      */
     @GetMapping("/guiainfo/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-
-        GuiaInfoDTO guiaInfo = guiaInfoService.getById(Integer.parseInt(id));
-        if (guiaInfo!=null){
-            return new ResponseEntity<>(guiaInfo, HttpStatus.ACCEPTED);
+        try {
+            GuiaInfoDTO guiaInfo = guiaInfoService.getById(Integer.parseInt(id));
+            if (guiaInfo != null) {
+                return new ResponseEntity<>(guiaInfo, HttpStatus.ACCEPTED);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorDTO("Ocurrió un error al procesar la solicitud intente nuevamente"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(new ErrorDTO("No se ha encontrado la guía"), HttpStatus.NOT_FOUND);
     }
