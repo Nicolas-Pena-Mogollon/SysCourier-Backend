@@ -38,6 +38,8 @@ public class GuiaIntroController {
      *
      * @param estado Estado de las guías a ser consultadas.
      * @return ResponseEntity con la lista de guías o un mensaje de error si no se encuentra el usuario.
+     *
+     * ASIGNADA 1 - ENTREGA 6 - DEVOLUCION 7
      */
     @GetMapping("/guiasIntro/{estado}")
     public ResponseEntity<?> getAllByUser(@PathVariable("estado") String estado) {

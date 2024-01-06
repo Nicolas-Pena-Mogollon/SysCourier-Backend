@@ -31,7 +31,12 @@ public interface GuiaIntroRepository extends JpaRepository<GuiaIntro, Integer> {
                     "INNER JOIN guia_estado_usuario geu ON ge.id = geu.guia_estado_id " +
                     "INNER JOIN usuario u ON u.id_usuario = geu.usuario_id " +
                     "WHERE u.correo = :correo " +
-                    "AND ge.estado = :codigoEstado")
+                    "AND ge.estado = :codigoEstado " +
+                    "AND ge.fecha = (" +
+                    "   SELECT MAX(ge_sub.fecha) " +
+                    "   FROM guia_estado ge_sub " +
+                    "   WHERE ge_sub.guia = g.id" +
+                    ")")
     Optional<List<GuiaIntro>> findGuiasIntroByCorreoAndCodigoEstado(
             @Param("correo") String correo,
             @Param("codigoEstado") String codigoEstado);
@@ -52,7 +57,12 @@ public interface GuiaIntroRepository extends JpaRepository<GuiaIntro, Integer> {
                     "INNER JOIN usuario u ON u.id_usuario = geu.usuario_id " +
                     "WHERE u.correo = :correo " +
                     "AND ge.estado = :codigoEstado " +
-                    "AND ge.fecha BETWEEN DATE_SUB(NOW(), INTERVAL 2 DAY) AND NOW()")
+                    "AND ge.fecha = (" +
+                    "   SELECT MAX(ge_sub.fecha) " +
+                    "   FROM guia_estado ge_sub " +
+                    "   WHERE ge_sub.guia = g.id " +
+                    "   AND ge_sub.fecha BETWEEN DATE_SUB(NOW(), INTERVAL 2 DAY) AND NOW()" +
+                    ")")
     Optional<List<GuiaIntro>> findGuiasIntroByCorreoAndCodigoEstadoconFecha(
             @Param("correo") String correo,
             @Param("codigoEstado") String codigoEstado);
