@@ -1,6 +1,7 @@
 package co.edu.unbosque.syscourier.controllers;
 
 import co.edu.unbosque.syscourier.DTOs.ErrorDTO;
+import co.edu.unbosque.syscourier.DTOs.LoginRequestDTO;
 import co.edu.unbosque.syscourier.DTOs.TokenDTO;
 import co.edu.unbosque.syscourier.security.JWTConfig;
 import co.edu.unbosque.syscourier.services.UsuarioService;
@@ -10,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import io.jsonwebtoken.Jwts;
 
 import java.util.Date;
@@ -34,11 +32,11 @@ public class LoginController {
         this.jwtConfig = jwtConfig;
     }
 
-    @PostMapping("/loginMensajero")
-    public ResponseEntity<?> login(@RequestParam("correo") String correo, @RequestParam("password") String password) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
         try {
-            if (usuarioService.validarCredenciales(correo, password, "MENSAJERO")) {
-                return new ResponseEntity<>(new TokenDTO(getJWTToken(correo, "MENSAJERO")), HttpStatus.ACCEPTED);
+            if (usuarioService.validarCredenciales(loginRequest.getCorreo(), loginRequest.getPassword(), "MENSAJERO")) {
+                return new ResponseEntity<>(new TokenDTO(getJWTToken(loginRequest.getCorreo(), "MENSAJERO")), HttpStatus.ACCEPTED);
             } else {
                 return new ResponseEntity<>(new ErrorDTO("No se ha ingresado correctamente"), HttpStatus.OK);
             }
