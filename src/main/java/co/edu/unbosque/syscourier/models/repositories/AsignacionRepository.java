@@ -42,15 +42,16 @@ public class AsignacionRepository {
      */
     @Transactional
     public void realizarAsignacion(int guiaId, String correo) throws AsignacionException {
+        Connection connection = null;
+        CallableStatement statement = null;
         try {
-            Connection connection = dataSource.getConnection();
-            CallableStatement statement = connection.prepareCall("{call realizarAsignacion(?, ?, ?)}");
+            connection = dataSource.getConnection();
+            statement = connection.prepareCall("{call realizarAsignacion(?, ?, ?)}");
             statement.setString(1, correo);
             statement.setInt(2, guiaId);
             statement.registerOutParameter(3, Types.INTEGER);  // Parámetro de salida para el resultado
             statement.execute();
             int resultado = statement.getInt(3);
-            statement.close();
 
             if (resultado == 0) {
                 throw new AsignacionException("No se ha logrado realizar la asignación");
@@ -61,6 +62,18 @@ public class AsignacionRepository {
             throw new AsignacionException("Error en el acceso a datos durante la asignación");
         } catch (Exception e) {
             throw new AsignacionException("Error durante la asignación: " + e.getMessage());
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new AsignacionException("No se ha logrado cerrar la conexión: " + e.getMessage());
+            }
         }
+
     }
 }

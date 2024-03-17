@@ -1,5 +1,6 @@
 package co.edu.unbosque.syscourier.models.repositories;
 
+import co.edu.unbosque.syscourier.exceptions.AsignacionException;
 import co.edu.unbosque.syscourier.exceptions.CambioEstadoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -48,9 +49,11 @@ public class CambioEstadoRepository {
      */
     @Transactional
     public boolean cambiarEstado(String correo, int guiaId, int codEstado, String motivo, String observaciones) throws CambioEstadoException {
+        Connection connection = null;
+        CallableStatement statement = null;
         try {
-            Connection connection = dataSource.getConnection();
-            CallableStatement statement = connection.prepareCall("{call cambiarEstado(?, ?, ?, ?, ?, ?)}");
+            connection = dataSource.getConnection();
+            statement = connection.prepareCall("{call cambiarEstado(?, ?, ?, ?, ?, ?)}");
             statement.setString(1, correo);
             statement.setInt(2, guiaId);
             statement.setInt(3, codEstado);
@@ -59,7 +62,6 @@ public class CambioEstadoRepository {
             statement.registerOutParameter(6, Types.INTEGER);  // Parámetro de salida para el resultado
             statement.execute();
             int resultado = statement.getInt(6);
-            statement.close();
 
             if (resultado == 0) {
                 throw new CambioEstadoException("No se ha logrado cambiar el estado");
@@ -70,6 +72,17 @@ public class CambioEstadoRepository {
             throw new CambioEstadoException("Error en el acceso a datos durante el cambio de estado");
         } catch (Exception e) {
             throw new CambioEstadoException("Error durante el cambio de estado: " + e.getMessage());
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new CambioEstadoException("No se ha logrado cerrar la conexión: " + e.getMessage());
+            }
         }
         return true;
     }
